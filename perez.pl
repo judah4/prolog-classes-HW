@@ -68,7 +68,7 @@ doneReqCore(Name) :- complete(Name, cs111, p),complete(Name, cs211, p),complete(
 
 isCore(Class) :- core(Class).
 
-departElectiveDone(Name,Depart,Class) :- course(Depart, Class),  complete(Name, Class, p).
+departElectiveDone(Name,Depart,Class) :- course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
 doneElectives(Name, Class1, Class2, Class3):- departElectiveDone(Name, computerscience,Class1), departElectiveDone(Name, math,Class2), departElectiveDone(Name, physics,Class3).
 
 doneReqElectives(Name):- doneElectives(Name, _,_,_).
