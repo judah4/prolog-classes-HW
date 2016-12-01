@@ -1,3 +1,8 @@
+
+department(computerscience).
+department(math).
+department(physics).
+
 course(computerscience,cs111).
 course(computerscience,cs211).
 course(computerscience,cs311).
@@ -34,7 +39,7 @@ enrolled(lovelace, phys301).
 enrolled(lovelace, math372).
 
 core(cs111).
-core( cs211).
+core(cs211).
 core(cs311).
 core(math270).
 core(phys201).
@@ -69,9 +74,10 @@ doneReqCore(Name) :- complete(Name, cs111, p),complete(Name, cs211, p),complete(
 isCore(Class) :- core(Class).
 
 departElectiveDone(Name,Depart,Class) :- course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
-doneElectives(Name, Class1, Class2, Class3):- departElectiveDone(Name, computerscience,Class1), departElectiveDone(Name, math,Class2), departElectiveDone(Name, physics,Class3).
+electivesDone(Name,Class) :- department(Depart), course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
 
-doneReqElectives(Name):- doneElectives(Name, _,_,_).
+doneElectives(Name):- departElectiveDone(Name, computerscience,_), departElectiveDone(Name, math,_), departElectiveDone(Name, physics,_).
+doneReqElectives(Name):- doneElectives(Name).
 
 doneRequirements(Student) :- student(Student), doneReqCore(Student), doneReqElectives(Student).
 done(Student) :- doneRequirements(Student).
