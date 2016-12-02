@@ -46,40 +46,42 @@ core(phys201).
 
 
 % completed, p for pass, f for fail
-complete(newton, cs111, p).
-complete(newton, cs211, p).
+complete(newton, cs111, a).
+complete(newton, cs211, a).
 
-complete(lovelace, cs111, p).
-complete(lovelace, cs211, p).
+complete(lovelace, cs111, b).
+complete(lovelace, cs211, b).
 
-complete(galileo, cs111, p).
-complete(galileo, cs211, p).
-complete(galileo, cs311, p).
-complete(galileo, math270, p).
-complete(galileo, phys201, p).
-complete(galileo, math242, p).
-complete(galileo, cs436, p).
+complete(galileo, cs111, b).
+complete(galileo, cs211, b).
+complete(galileo, cs311, b).
+complete(galileo, math270, a).
+complete(galileo, phys201, b).
+complete(galileo, math242, a).
+complete(galileo, cs436, a).
 
-complete(turing, cs111, p).
-complete(turing, cs211, p).
-complete(turing, cs311, p).
-complete(turing, math270, p).
-complete(turing, phys201, p).
-complete(turing, phys301, p).
-complete(turing, math372, p).
+complete(turing, cs111, a).
+complete(turing, cs211, b).
+complete(turing, cs311, a).
+complete(turing, math270, a).
+complete(turing, phys201, a).
+complete(turing, phys301, a).
+complete(turing, math372, a).
+
+passed(Name, Class) :- complete(Name, Class, Grade), (Grade=a; Grade=b; Grade=c).
 
 % required courses
-doneReqCore(Name) :- complete(Name, cs111, p),complete(Name, cs211, p),complete(Name, cs311, p),complete(Name, math270, p),complete(Name, phys201, p).
+doneReqCore(Name) :- passed(Name, cs111),passed(Name, cs211),passed(Name, cs311),passed(Name, math270),passed(Name, phys201).
 
 isCore(Class) :- core(Class).
 
-departElectiveDone(Name,Depart,Class) :- course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
+departElectiveDone(Name,Depart,Class) :- course(Depart, Class), \+ isCore(Class), passed(Name, Class).
 % What are the elective requirements fulfilled by a student?
-electivesDone(Name,Class) :- department(Depart), course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
+electivesDone(Name,Class) :- department(Depart), course(Depart, Class), \+ isCore(Class), passed(Name, Class).
 
 doneElectives(Name):- departElectiveDone(Name, computerscience,_), departElectiveDone(Name, math,_), departElectiveDone(Name, physics,_).
 doneReqElectives(Name):- doneElectives(Name).
 
-% Which students  have satisfied the requirements?
+% Which students have satisfied the requirements?
 doneRequirements(Student) :- student(Student), doneReqCore(Student), doneReqElectives(Student).
 done(Student) :- doneRequirements(Student).
