@@ -74,10 +74,12 @@ doneReqCore(Name) :- complete(Name, cs111, p),complete(Name, cs211, p),complete(
 isCore(Class) :- core(Class).
 
 departElectiveDone(Name,Depart,Class) :- course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
+% What are the elective requirements fulfilled by a student?
 electivesDone(Name,Class) :- department(Depart), course(Depart, Class), \+ isCore(Class), complete(Name, Class, p).
 
 doneElectives(Name):- departElectiveDone(Name, computerscience,_), departElectiveDone(Name, math,_), departElectiveDone(Name, physics,_).
 doneReqElectives(Name):- doneElectives(Name).
 
+% Which students  have satisfied the requirements?
 doneRequirements(Student) :- student(Student), doneReqCore(Student), doneReqElectives(Student).
 done(Student) :- doneRequirements(Student).
